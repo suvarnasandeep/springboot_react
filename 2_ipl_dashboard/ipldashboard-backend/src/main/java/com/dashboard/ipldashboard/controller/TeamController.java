@@ -5,7 +5,6 @@ import com.dashboard.ipldashboard.model.Team;
 import com.dashboard.ipldashboard.repository.MatchRepository;
 import com.dashboard.ipldashboard.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,7 +24,7 @@ public class TeamController {
     public Team getTeam(@PathVariable String teamName){
 
         Team team = teamRepository.findByTeamName(teamName);
-        List<Match> matchList = matchRepository.findLatestMatchByTeam(teamName, 4);
+        List<Match> matchList = matchRepository.findLatestMatchByTeam(teamName, 8);
         team.setMatches(matchList);
 
         matchList.forEach(match -> {
@@ -43,5 +42,11 @@ public class TeamController {
         LocalDate endDate = LocalDate.of(year+1, 1, 1 );
 
         return matchRepository.getMatchesByTeamBetweenDates(teamName, startDate,endDate);
+    }
+
+    @GetMapping("/team/")
+    public Iterable<Team> getAllTeam(){
+
+        return teamRepository.findAll();
     }
 }
